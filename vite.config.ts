@@ -1,16 +1,22 @@
-import { defineConfig } from 'vite'
+import path from 'node:path'
 import { crx } from '@crxjs/vite-plugin'
-import manifest from './src/manifest.json'
+import { defineConfig } from 'vite'
+import manifest from './manifest.config'
 
 export default defineConfig({
-  plugins: [crx({ manifest })],
-  build: {
-    rollupOptions: {
-      input: {
-        popup: 'src/popup/index.html',
-        background: 'src/background/index.ts',
-        content: 'src/content/index.ts'
-      }
-    }
-  }
+  resolve: {
+    alias: {
+      '@': `${path.resolve(__dirname, 'src')}`,
+    },
+  },
+  plugins: [
+    crx({ manifest }),
+  ],
+  server: {
+    cors: {
+      origin: [
+        /chrome-extension:\/\//,
+      ],
+    },
+  },
 })
