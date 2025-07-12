@@ -37,11 +37,11 @@ export default defineManifest({
   commands: {
     "_execute_action": {
       suggested_key: {
-        default: "Alt+O",
-        windows: "Alt+O",
-        mac: "Alt+O",
-        chromeos: "Alt+O",
-        linux: "Alt+O"
+        default: "Alt+G",
+        windows: "Alt+G",
+        mac: "Alt+G",
+        chromeos: "Alt+G",
+        linux: "Alt+G"
       },
       description: "Open GitHub repository search"
     }

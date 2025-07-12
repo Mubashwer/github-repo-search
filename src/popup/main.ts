@@ -139,7 +139,7 @@ class PopupSearchManager {
       <div class="instructions">
         <p>Start typing to search GitHub repositories</p>
         <div class="shortcut-info">
-          <span class="shortcut-key">Alt+O</span> opens this popup
+          <span class="shortcut-key">Alt+G</span> opens this popup
         </div>
       </div>
     `

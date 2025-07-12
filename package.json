@@ -1,7 +1,7 @@
 {
   "name": "github-browser-plugin",
   "version": "1.0.0",
-  "description": "Chrome extension for searching GitHub repositories with Alt+O hotkey",
+  "description": "Chrome extension for searching GitHub repositories with Alt+G hotkey",
   "type": "module",
   "scripts": {
     "dev": "vite",

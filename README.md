@@ -1,10 +1,10 @@
 # GitHub Browser Plugin
 
-A Chrome extension that allows you to quickly search GitHub repositories using the **Alt+O** keyboard shortcut, similar to the Okta Browser Plugin.
+A Chrome extension that allows you to quickly search GitHub repositories using the **Alt+G** keyboard shortcut, similar to the Okta Browser Plugin.
 
 ## Features
 
-- 🔍 **Quick Search**: Press `Alt+O` from any webpage to open the search overlay
+- 🔍 **Quick Search**: Press `Alt+G` from any webpage to open the search overlay
 - ⚡ **Fast Results**: Real-time search using GitHub's API
 - 🎯 **Keyboard Navigation**: Use arrow keys to navigate, Enter to open repos
 - 🎨 **Clean UI**: Modern, responsive design that works on any website
@@ -41,7 +41,7 @@ The extension will be available on the Chrome Web Store once published.
 
 ## Usage
 
-1. **Open Search**: Press `Alt+O` on any webpage
+1. **Open Search**: Press `Alt+G` on any webpage
 2. **Search**: Type your query to search GitHub repositories
 3. **Navigate**: Use `↑/↓` arrow keys to select results
 4. **Open**: Press `Enter` to open the selected repository in a new tab
