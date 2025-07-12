@@ -20,7 +20,19 @@ export default defineManifest({
   },
   action: {
     default_popup: "src/popup/index.html",
-    default_title: "GitHub Browser Plugin"
+    default_title: "GitHub Browser Plugin",
+    default_icon: {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  icons: {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
   },
   commands: {
     "_execute_action": {
