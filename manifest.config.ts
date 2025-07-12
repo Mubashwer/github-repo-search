@@ -33,5 +33,11 @@ export default defineManifest({
       },
       description: "Open GitHub repository search"
     }
-  }
+  },
+  web_accessible_resources: [
+    {
+      resources: ["auth.html"],
+      matches: ["<all_urls>"]
+    }
+  ],
 })

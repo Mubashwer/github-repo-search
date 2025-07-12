@@ -25,20 +25,14 @@ export class AuthService {
 
   async authenticate(): Promise<AuthState> {
     try {
-      // GitHub OAuth configuration
-      const clientId = 'your_client_id_here' // We'll need to set this up
-      const redirectUri = chrome.identity.getRedirectURL()
-      const scope = 'repo read:user'
+      // Create a new tab with authentication instructions
+      const authTab = await chrome.tabs.create({
+        url: chrome.runtime.getURL('auth.html'),
+        active: true
+      })
       
-      const authUrl = `https://github.com/login/oauth/authorize?` +
-        `client_id=${clientId}&` +
-        `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-        `scope=${encodeURIComponent(scope)}&` +
-        `response_type=code`
-
-      // For now, let's use a simpler approach with Personal Access Token
-      // In production, you'd implement full OAuth flow
-      const token = await this.promptForToken()
+      // Wait for the user to provide the token
+      const token = await this.waitForToken(authTab.id!)
       
       if (token) {
         const user = await this.getUserInfo(token)
@@ -59,22 +53,23 @@ export class AuthService {
     }
   }
 
-  private async promptForToken(): Promise<string | null> {
+  private async waitForToken(tabId: number): Promise<string | null> {
     return new Promise((resolve) => {
-      const token = prompt(`GitHub API Rate Limit Exceeded!
-
-To continue using the extension, you need to provide a GitHub Personal Access Token.
-
-1. Go to: https://github.com/settings/tokens
-2. Click "Generate new token (classic)"
-3. Select these scopes:
-   - repo (for private repos, optional)
-   - read:user (for user info)
-4. Copy the token and paste it here:
-
-Token:`)
+      const listener = (message: any, sender: chrome.runtime.MessageSender) => {
+        if (sender.tab?.id === tabId && message.action === 'auth-token') {
+          chrome.runtime.onMessage.removeListener(listener)
+          chrome.tabs.remove(tabId)
+          resolve(message.token)
+        }
+      }
       
-      resolve(token?.trim() || null)
+      chrome.runtime.onMessage.addListener(listener)
+      
+      // Timeout after 5 minutes
+      setTimeout(() => {
+        chrome.runtime.onMessage.removeListener(listener)
+        resolve(null)
+      }, 5 * 60 * 1000)
     })
   }
 
