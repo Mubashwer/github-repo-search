@@ -34,3 +34,23 @@ export interface SearchResponse {
 export interface ToggleMessage {
   action: 'toggle-search';
 }
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  token?: string;
+  user?: {
+    login: string;
+    name: string;
+    avatar_url: string;
+  };
+}
+
+export interface AuthMessage {
+  action: 'authenticate' | 'logout' | 'get-auth-state';
+}
+
+export interface AuthResponse {
+  success: boolean;
+  authState?: AuthState;
+  error?: string;
+}

@@ -8,7 +8,8 @@ export default defineManifest({
   description: pkg.description,
   permissions: [
     "activeTab",
-    "storage"
+    "storage",
+    "identity"
   ],
   host_permissions: [
     "https://api.github.com/*"

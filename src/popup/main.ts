@@ -155,15 +155,45 @@ class PopupSearchManager {
   }
 
   private renderError() {
+    const isRateLimitError = this.state.error?.includes('Rate limit exceeded')
+    
     this.resultsContainer.innerHTML = `
       <div class="error">
         <div style="margin-bottom: 10px;">⚠️</div>
         <div>Error: ${this.state.error}</div>
         <div style="margin-top: 8px; font-size: 12px; opacity: 0.7;">
-          Try again or check your internet connection
+          ${isRateLimitError ? 'Click below to authenticate with GitHub for higher rate limits' : 'Try again or check your internet connection'}
         </div>
+        ${isRateLimitError ? '<button class="auth-button" onclick="this.authenticateWithGitHub()">Authenticate with GitHub</button>' : ''}
       </div>
     `
+    
+    if (isRateLimitError) {
+      const authButton = this.resultsContainer.querySelector('.auth-button')
+      authButton?.addEventListener('click', this.authenticateWithGitHub.bind(this))
+    }
+  }
+
+  private async authenticateWithGitHub() {
+    try {
+      this.renderLoading()
+      const response = await chrome.runtime.sendMessage({ action: 'authenticate' })
+      
+      if (response.success) {
+        // Re-run the last search
+        if (this.state.searchTerm) {
+          this.performSearch(this.state.searchTerm)
+        } else {
+          this.renderInstructions()
+        }
+      } else {
+        this.state.error = response.error || 'Authentication failed'
+        this.renderError()
+      }
+    } catch (error) {
+      this.state.error = 'Authentication failed'
+      this.renderError()
+    }
   }
 
   private renderResults() {
