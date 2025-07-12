@@ -6,37 +6,32 @@
   <title>GitHub Browser Plugin</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body style="width: 350px; height: 400px;">
-  <div class="header">
-    <h1>🔍 GitHub Browser Plugin</h1>
-    <p>Search GitHub repositories instantly</p>
-  </div>
-  
-  <div class="shortcut-info">
-    <div style="margin-bottom: 8px;">
-      <strong>Keyboard Shortcut:</strong>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🔍 GitHub Search</h1>
+      <p>Find repositories instantly</p>
     </div>
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <span class="shortcut-key">Alt</span>
-      <span>+</span>
-      <span class="shortcut-key">O</span>
-      <span style="color: #666; font-size: 12px;">anywhere on the web</span>
+    
+    <div class="search-container">
+      <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search GitHub repositories..." 
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <div class="search-icon">🔍</div>
     </div>
-  </div>
-  
-  <div class="instructions">
-    <h3>How to use:</h3>
-    <ul>
-      <li>Press <strong>Alt+O</strong> on any webpage to open the search overlay</li>
-      <li>Start typing to search GitHub repositories</li>
-      <li>Use <strong>↑/↓</strong> arrow keys to navigate results</li>
-      <li>Press <strong>Enter</strong> to open the selected repository</li>
-      <li>Press <strong>Escape</strong> to close the search overlay</li>
-    </ul>
-  </div>
-  
-  <div class="footer">
-    <a href="https://github.com" target="_blank">Powered by GitHub API</a>
+    
+    <div id="resultsContainer" class="results-container">
+      <div class="instructions">
+        <p>Start typing to search GitHub repositories</p>
+        <div class="shortcut-info">
+          <span class="shortcut-key">Alt+O</span> opens this popup
+        </div>
+      </div>
+    </div>
   </div>
   
   <script type="module" src="main.ts"></script>

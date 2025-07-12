@@ -17,18 +17,12 @@ export default defineManifest({
     service_worker: "src/background/main.ts",
     type: "module"
   },
-  content_scripts: [
-    {
-      matches: ["<all_urls>"],
-      js: ["src/content/main.ts"]
-    }
-  ],
   action: {
     default_popup: "src/popup/index.html",
     default_title: "GitHub Browser Plugin"
   },
   commands: {
-    "toggle-search": {
+    "_execute_action": {
       suggested_key: {
         default: "Alt+O",
         windows: "Alt+O",
@@ -36,7 +30,7 @@ export default defineManifest({
         chromeos: "Alt+O",
         linux: "Alt+O"
       },
-      description: "Toggle GitHub repository search"
+      description: "Open GitHub repository search"
     }
   }
 })

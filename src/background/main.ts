@@ -1,16 +1,4 @@
-// Background script for handling keyboard shortcuts and communication
-chrome.commands.onCommand.addListener((command: string) => {
-  if (command === 'toggle-search') {
-    // Get the active tab and inject the search overlay
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs: chrome.tabs.Tab[]) => {
-      if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, { action: 'toggle-search' });
-      }
-    });
-  }
-});
-
-// Handle messages from content script
+// Background script for handling search requests
 chrome.runtime.onMessage.addListener((request: any, _sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) => {
   if (request.action === 'search-repos') {
     searchGitHubRepos(request.query)

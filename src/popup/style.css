@@ -1,109 +1,214 @@
-/* Popup styles for GitHub Browser Plugin */
-:root {
-  --primary-color: #0366d6;
-  --secondary-color: #24292e;
-  --background-color: #f6f8fa;
-  --border-color: #e1e4e8;
-  --text-color: #24292e;
-  --text-muted: #666;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+body {
+  width: 400px;
+  height: 500px;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f6f8fa;
+  overflow: hidden;
 }
 
-body {
-  margin: 0;
-  padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--background-color);
-  color: var(--text-color);
-  line-height: 1.5;
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 20px;
+  padding: 16px 20px 12px;
+  background: white;
+  border-bottom: 1px solid #e1e4e8;
 }
 
 .header h1 {
-  color: var(--secondary-color);
-  font-size: 20px;
-  margin: 0 0 8px 0;
+  color: #24292e;
+  font-size: 18px;
+  margin: 0 0 4px 0;
   font-weight: 600;
 }
 
 .header p {
-  color: var(--text-muted);
-  font-size: 14px;
+  color: #666;
+  font-size: 13px;
   margin: 0;
 }
 
-.shortcut-info {
-  background: white;
-  border-radius: 8px;
+.search-container {
+  position: relative;
   padding: 16px;
-  box-shadow: var(--shadow);
-  margin-bottom: 16px;
-  border: 1px solid var(--border-color);
+  background: white;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.search-container input:focus {
+  border-color: #0366d6;
+  box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
+}
+
+.results-container {
+  flex: 1;
+  overflow-y: auto;
+  background: white;
+}
+
+.instructions {
+  padding: 32px 20px;
+  text-align: center;
+  color: #666;
+}
+
+.instructions p {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+}
+
+.shortcut-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
 }
 
 .shortcut-key {
-  display: inline-block;
   background: #f3f4f6;
   border: 1px solid #d1d5db;
   border-radius: 4px;
   padding: 4px 8px;
   font-family: monospace;
-  font-size: 12px;
   font-weight: 600;
   color: #374151;
-  margin: 0 2px;
 }
 
-.instructions {
-  background: white;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border-color);
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  color: #666;
 }
 
-.instructions h3 {
-  margin: 0 0 12px 0;
-  color: var(--secondary-color);
-  font-size: 14px;
-  font-weight: 600;
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e1e4e8;
+  border-radius: 50%;
+  border-top-color: #0366d6;
+  animation: spin 1s linear infinite;
+  margin-right: 12px;
 }
 
-.instructions ul {
-  margin: 0;
-  padding-left: 20px;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-.instructions li {
-  margin-bottom: 8px;
-  color: var(--text-muted);
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.instructions strong {
-  color: var(--secondary-color);
-}
-
-.footer {
+.error {
+  padding: 20px;
   text-align: center;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-color);
+  color: #d73a49;
 }
 
-.footer a {
-  color: var(--primary-color);
+.repo-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e1e4e8;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.repo-item:hover {
+  background-color: #f6f8fa;
+}
+
+.repo-item:last-child {
+  border-bottom: none;
+}
+
+.repo-item.selected {
+  background-color: #0366d6;
+  color: white;
+}
+
+.repo-item.selected .repo-name {
+  color: white;
+}
+
+.repo-item.selected .repo-description {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.repo-item.selected .repo-meta {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.repo-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.repo-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.repo-name {
+  font-weight: 600;
+  color: #0366d6;
+  font-size: 14px;
+  margin-bottom: 4px;
   text-decoration: none;
-  font-size: 12px;
-  transition: color 0.2s ease;
 }
 
-.footer a:hover {
+.repo-name:hover {
   text-decoration: underline;
-  color: #0256d6;
+}
+
+.repo-description {
+  color: #666;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.repo-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: #666;
+}
+
+.no-results {
+  padding: 32px 20px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
 }
