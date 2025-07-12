@@ -27,7 +27,7 @@ export class AuthService {
     try {
       // Create a new tab with authentication instructions
       const authTab = await chrome.tabs.create({
-        url: chrome.runtime.getURL('auth.html'),
+        url: chrome.runtime.getURL('src/auth/index.html'),
         active: true
       })
       

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>GitHub Authentication - GitHub Browser Plugin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>
+            🔐 GitHub Authentication
+        </h1>
+        
+        <p>To continue using the GitHub Browser Plugin, you need to authenticate with GitHub to increase your API rate limit from 60 to 5,000 requests per hour.</p>
+        
+        <div class="step">
+            <h3>Step 1: Generate a Personal Access Token</h3>
+            <p>Click the button below to open GitHub's token creation page:</p>
+            <a href="https://github.com/settings/tokens/new?scopes=repo&description=GitHub%20Browser%20Plugin" 
+               target="_blank" 
+               class="button">
+                Create Token on GitHub
+            </a>
+        </div>
+        
+        <div class="step">
+            <h3>Step 2: Configure Token Settings</h3>
+            <p>On the GitHub page:</p>
+            <ul>
+                <li>Set a descriptive name like "GitHub Browser Plugin"</li>
+                <li>Select these scopes:
+                    <ul>
+                        <li><strong>repo</strong> (optional, for private repos)</li>
+                    </ul>
+                </li>
+                <li>Click "Generate token"</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h3>Step 3: Copy and Paste Your Token</h3>
+            <p>Copy the generated token and paste it below:</p>
+            <input type="password" 
+                   id="tokenInput" 
+                   class="token-input" 
+                   placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+        </div>
+        
+        <div class="warning">
+            <strong>Important:</strong> Keep your token secure! It provides access to your GitHub account.
+        </div>
+        
+        <div id="message"></div>
+        
+        <button id="authenticateBtn" class="button">Authenticate</button>
+        <button id="cancelBtn" class="button secondary">Cancel</button>
+    </div>
+    
+    <script type="module" src="main.ts"></script>
+</body>
+</html>

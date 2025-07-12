@@ -36,7 +36,7 @@ export default defineManifest({
   },
   web_accessible_resources: [
     {
-      resources: ["auth.html"],
+      resources: ["src/auth/index.html"],
       matches: ["<all_urls>"]
     }
   ],
