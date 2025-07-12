@@ -38,11 +38,6 @@ export interface ToggleMessage {
 export interface AuthState {
   isAuthenticated: boolean;
   token?: string;
-  user?: {
-    login: string;
-    name: string;
-    avatar_url: string;
-  };
 }
 
 export interface AuthMessage {

@@ -35,11 +35,12 @@ export class AuthService {
       const token = await this.waitForToken(authTab.id!)
       
       if (token) {
-        const user = await this.getUserInfo(token)
+        // Validate token by testing search endpoint
+        await this.validateToken(token)
+        
         this.authState = {
           isAuthenticated: true,
-          token: token,
-          user: user
+          token: token
         }
         
         // Store auth state
@@ -73,30 +74,26 @@ export class AuthService {
     })
   }
 
-  private async getUserInfo(token: string): Promise<any> {
-    const response = await fetch('https://api.github.com/user', {
-      headers: {
-        'Authorization': `token ${token}`,
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    })
-    
-    if (!response.ok) {
-      throw new Error(`GitHub API error: ${response.status}`)
-    }
-    
-    return response.json()
-  }
-
-  private async validateToken(): Promise<void> {
-    if (!this.authState.token) return
+  private async validateToken(token?: string): Promise<void> {
+    const tokenToValidate = token || this.authState.token
+    if (!tokenToValidate) return
     
     try {
-      await this.getUserInfo(this.authState.token)
+      const response = await fetch('https://api.github.com/search/repositories?q=test&per_page=1', {
+        headers: {
+          'Authorization': `token ${tokenToValidate}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      })
+      
+      if (!response.ok) {
+        throw new Error(`GitHub API error: ${response.status}`)
+      }
     } catch (error) {
       // Token is invalid, clear auth state
       this.authState = { isAuthenticated: false }
       await chrome.storage.local.remove(['github_auth_state'])
+      throw error
     }
   }
 
