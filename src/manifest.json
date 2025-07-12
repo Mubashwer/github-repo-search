@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Browser Plugin",
+  "version": "1.0.0",
+  "description": "Search GitHub repositories with Alt+O hotkey",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://api.github.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/index.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/index.ts"]
+    }
+  ],
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_title": "GitHub Browser Plugin"
+  },
+  "commands": {
+    "toggle-search": {
+      "suggested_key": {
+        "default": "Alt+O",
+        "windows": "Alt+O",
+        "mac": "Alt+O",
+        "chromeos": "Alt+O",
+        "linux": "Alt+O"
+      },
+      "description": "Toggle GitHub repository search"
+    }
+  }
+}

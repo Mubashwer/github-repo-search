@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Browser Plugin</title>
+  <style>
+    body {
+      width: 350px;
+      height: 400px;
+      margin: 0;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f6f8fa;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      color: #24292e;
+      font-size: 20px;
+      margin: 0 0 8px 0;
+      font-weight: 600;
+    }
+    
+    .header p {
+      color: #666;
+      font-size: 14px;
+      margin: 0;
+    }
+    
+    .shortcut-info {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 16px;
+    }
+    
+    .shortcut-key {
+      display: inline-block;
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-family: monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+    }
+    
+    .instructions {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .instructions h3 {
+      margin: 0 0 12px 0;
+      color: #24292e;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .instructions ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    
+    .instructions li {
+      margin-bottom: 8px;
+      color: #666;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #e1e4e8;
+    }
+    
+    .footer a {
+      color: #0366d6;
+      text-decoration: none;
+      font-size: 12px;
+    }
+    
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🔍 GitHub Browser Plugin</h1>
+    <p>Search GitHub repositories instantly</p>
+  </div>
+  
+  <div class="shortcut-info">
+    <div style="margin-bottom: 8px;">
+      <strong>Keyboard Shortcut:</strong>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span class="shortcut-key">Alt</span>
+      <span>+</span>
+      <span class="shortcut-key">O</span>
+      <span style="color: #666; font-size: 12px;">anywhere on the web</span>
+    </div>
+  </div>
+  
+  <div class="instructions">
+    <h3>How to use:</h3>
+    <ul>
+      <li>Press <strong>Alt+O</strong> on any webpage to open the search overlay</li>
+      <li>Start typing to search GitHub repositories</li>
+      <li>Use <strong>↑/↓</strong> arrow keys to navigate results</li>
+      <li>Press <strong>Enter</strong> to open the selected repository</li>
+      <li>Press <strong>Escape</strong> to close the search overlay</li>
+    </ul>
+  </div>
+  
+  <div class="footer">
+    <a href="https://github.com" target="_blank">Powered by GitHub API</a>
+  </div>
+  
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
