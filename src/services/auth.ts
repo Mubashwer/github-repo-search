@@ -18,8 +18,9 @@ export class AuthService {
     const result = await chrome.storage.local.get(['github_auth_state'])
     if (result.github_auth_state) {
       this.authState = result.github_auth_state
-      // Validate token is still valid
-      await this.validateToken()
+      // Only validate token when it's actually used, not on initialization
+      // This prevents clearing valid tokens due to temporary network issues
+      console.log('Loaded auth state from storage:', this.authState.isAuthenticated ? 'authenticated' : 'not authenticated')
     }
   }
 
