@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Chrome extension for searching GitHub repositories with Alt+G hotkey",
   "type": "module",
+  "private": true,
   "scripts": {
     "build": "vite build",
     "dev": "vite",

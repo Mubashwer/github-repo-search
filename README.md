@@ -17,6 +17,23 @@ A Chrome extension that allows you to quickly search GitHub repositories using t
 
 ## Installation
 
+### Download from GitHub Releases (Recommended)
+
+1. **Download the extension**:
+   - Go to the [GitHub Releases page](https://github.com/Mubashwer/github-repo-search/releases)
+   - Download the latest `crx-github-repo-search-X.X.X.zip` file
+   - Extract the downloaded zip file to a folder on your computer
+
+2. **Load the extension in Chrome**:
+   - Open Chrome and go to `chrome://extensions/`
+   - Enable "Developer mode" (toggle in the top right)
+   - Click "Load unpacked" and select the extracted folder
+   - The extension should now appear in your extensions list
+
+3. **Start using**:
+   - Press `Alt+G` on any webpage to open the search overlay
+   - No additional setup required!
+
 ### Development Install
 
 1. Clone this repository:
@@ -43,9 +60,9 @@ A Chrome extension that allows you to quickly search GitHub repositories using t
    - Enable "Developer mode"
    - Click "Load unpacked" and select the `dist` folder
 
-### Production Install
+### Chrome Web Store
 
-The extension will be available on the Chrome Web Store once published.
+The extension is not currently available on the Chrome Web Store. For now, please use the [GitHub Releases](#download-from-github-releases-recommended) method above.
 
 ## Usage
 
@@ -74,6 +91,15 @@ The extension will be available on the Chrome Web Store once published.
 - **ESLint** - JavaScript/TypeScript linter
 - **Prettier** - Code formatter
 - **Semantic Release** - Automated versioning and releases
+
+### Automated Releases
+
+This project uses semantic-release with GitHub Actions for automated releases:
+
+- **Conventional Commits**: Follow the commit convention for automatic version bumping
+- **GitHub Releases**: Automatically created on pushes to main branch
+- **Extension Packages**: Built extension zips are attached to each release
+- **CI/CD Pipeline**: Automated testing, building, and deployment
 
 ### Scripts
 
