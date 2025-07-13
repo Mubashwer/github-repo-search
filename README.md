@@ -2,6 +2,8 @@
 
 A Chrome extension that allows you to quickly search GitHub repositories using the **Alt+G** keyboard shortcut, similar to the Okta Browser Plugin.
 
+> **⚡ Quick & Dirty Prototype**: This extension was 99% "vibe-coded" as a rapid prototype to test the concept. It's functional but built quick and dirty - perfect for experimentation and learning, but don't expect production-level polish! 😄
+
 ![Image displaying the GitHub Repo Search extension popup](popup-screenshot.png)
 
 ## Features
@@ -139,6 +141,18 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/):
 - `refactor:` - Code refactoring
 - `test:` - Test additions/changes
 - `chore:` - Maintenance tasks
+
+## Disclaimer
+
+This project was built as a quick prototype to explore Chrome extension development and GitHub API integration. It's intentionally "vibe-coded" - meaning it prioritizes getting something working quickly over perfect architecture or comprehensive error handling. 
+
+**What this means:**
+- 🏃‍♂️ **Built for speed**: Quick iteration over perfect code structure
+- 🧪 **Experimental**: Great for learning and testing concepts
+- 🔧 **Functional**: It works, but there's room for improvement
+- 📚 **Educational**: Perfect for understanding Chrome extension basics
+
+Feel free to fork, improve, and make it more robust! Pull requests welcome. 🚀
 
 ## License
 
