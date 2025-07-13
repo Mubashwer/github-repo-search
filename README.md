@@ -1,4 +1,4 @@
-# GitHub Browser Plugin
+# GitHub Repo Search
 
 A Chrome extension that allows you to quickly search GitHub repositories using the **Alt+G** keyboard shortcut, similar to the Okta Browser Plugin.
 

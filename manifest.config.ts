@@ -20,7 +20,7 @@ export default defineManifest({
   },
   action: {
     default_popup: "src/popup/index.html",
-    default_title: "GitHub Browser Plugin",
+    default_title: "GitHub Repo Search",
     default_icon: {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png",
