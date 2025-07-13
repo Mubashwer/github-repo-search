@@ -2,9 +2,7 @@ import type { AuthState } from '../types'
 
 export class AuthService {
   private static instance: AuthService
-  private authState: AuthState = {
-    isAuthenticated: false
-  }
+  private static readonly STORAGE_KEY = 'github_auth_state'
 
   static getInstance(): AuthService {
     if (!AuthService.instance) {
@@ -14,11 +12,8 @@ export class AuthService {
   }
 
   async initialize(): Promise<void> {
-    // Load stored auth state
-    const result = await chrome.storage.local.get(['github_auth_state'])
-    if (result.github_auth_state) {
-      this.authState = result.github_auth_state
-    }
+    // No need to load into memory - we'll always read from storage
+    console.log('AuthService initialized')
   }
 
   async authenticate(): Promise<AuthState> {
@@ -36,16 +31,18 @@ export class AuthService {
         // Validate token by testing search endpoint
         await this.validateToken(token)
         
-        this.authState = {
+        const authState: AuthState = {
           isAuthenticated: true,
           token: token
         }
         
         // Store auth state
-        await chrome.storage.local.set({ github_auth_state: this.authState })
+        await chrome.storage.local.set({ [AuthService.STORAGE_KEY]: authState })
+        
+        return authState
       }
       
-      return this.authState
+      return { isAuthenticated: false }
     } catch (error) {
       console.error('Authentication failed:', error)
       throw error
@@ -73,7 +70,13 @@ export class AuthService {
   }
 
   private async validateToken(token?: string): Promise<void> {
-    const tokenToValidate = token || this.authState.token
+    let tokenToValidate = token
+    
+    if (!tokenToValidate) {
+      const authState = await this.getAuthState()
+      tokenToValidate = authState.token
+    }
+    
     if (!tokenToValidate) return
     
     try {
@@ -94,17 +97,19 @@ export class AuthService {
     }
   }
 
-  getAuthState(): AuthState {
-    return this.authState
+  async getAuthState(): Promise<AuthState> {
+    const result = await chrome.storage.local.get([AuthService.STORAGE_KEY])
+    return result[AuthService.STORAGE_KEY] || { isAuthenticated: false }
   }
 
-  getAuthHeaders(): Record<string, string> {
+  async getAuthHeaders(): Promise<Record<string, string>> {
     const headers: Record<string, string> = {
       'Accept': 'application/vnd.github.v3+json'
     }
     
-    if (this.authState.isAuthenticated && this.authState.token) {
-      headers['Authorization'] = `token ${this.authState.token}`
+    const authState = await this.getAuthState()
+    if (authState.isAuthenticated && authState.token) {
+      headers['Authorization'] = `token ${authState.token}`
     }
     
     return headers

@@ -5,31 +5,63 @@ const authService = AuthService.getInstance()
 
 // Initialize when extension starts
 chrome.runtime.onStartup.addListener(async () => {
+  console.log('Extension startup - initializing auth service');
   await authService.initialize()
 })
 
 chrome.runtime.onInstalled.addListener(async () => {
+  console.log('Extension installed - initializing auth service');
   await authService.initialize()
+})
+
+// Handle service worker suspension/resumption
+chrome.runtime.onSuspend.addListener(() => {
+  console.log('Service worker suspending');
+})
+
+chrome.runtime.onSuspendCanceled.addListener(() => {
+  console.log('Service worker suspension canceled');
 })
 
 // Background script for handling search requests
 chrome.runtime.onMessage.addListener((request: any, _sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) => {
   if (request.action === 'search-repos') {
-    searchGitHubRepos(request.query, request.org)
+    // Always ensure auth service is initialized before searching
+    authService.initialize()
+      .then(() => searchGitHubRepos(request.query, request.org))
       .then(repos => sendResponse({ repos }))
       .catch(error => sendResponse({ error: error.message }));
     return true; // Keep the message channel open for async response
   }
   
   if (request.action === 'authenticate') {
-    authService.authenticate()
+    // Ensure auth service is initialized before authenticating
+    authService.initialize()
+      .then(() => authService.authenticate())
       .then(authState => sendResponse({ success: true, authState }))
       .catch(error => sendResponse({ success: false, error: error.message }));
     return true;
   }
   
   if (request.action === 'get-auth-state') {
-    sendResponse({ success: true, authState: authService.getAuthState() });
+    // Always ensure auth service is initialized before returning state
+    authService.initialize()
+      .then(() => {
+        sendResponse({ success: true, authState: authService.getAuthState() });
+      })
+      .catch(error => {
+        console.error('Failed to initialize auth service:', error);
+        sendResponse({ success: false, error: error.message });
+      });
+    return true;
+  }
+  
+  if (request.action === 'auth-token') {
+    // Handle authentication token from auth page
+    chrome.storage.local.set({ 'github-token': request.token })
+      .then(() => authService.initialize()) // Re-initialize to load the new token
+      .then(() => sendResponse({ success: true }))
+      .catch(error => sendResponse({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }));
     return true;
   }
 });
@@ -54,14 +86,25 @@ async function searchGitHubRepos(query: string, org?: string) {
     
     if (!response.ok) {
       if (response.status === 403) {
-        // Rate limit exceeded - trigger authentication
+        // Check if it's a rate limit error
+        const rateLimitRemaining = response.headers.get('X-RateLimit-Remaining')
         const rateLimitReset = response.headers.get('X-RateLimit-Reset')
         const resetTime = rateLimitReset ? new Date(parseInt(rateLimitReset) * 1000).toLocaleTimeString() : 'unknown'
         
-        if (!authService.getAuthState().isAuthenticated) {
-          throw new Error(`Rate limit exceeded. Please authenticate with GitHub to continue. Rate limit resets at ${resetTime}.`)
+        console.log('Rate limit info:', {
+          remaining: rateLimitRemaining,
+          reset: resetTime,
+          isAuthenticated: authService.getAuthState().isAuthenticated
+        })
+        
+        if (rateLimitRemaining === '0') {
+          if (!authService.getAuthState().isAuthenticated) {
+            throw new Error(`Rate limit exceeded. Please authenticate with GitHub for higher limits (5000/hour vs 60/hour). Rate limit resets at ${resetTime}.`)
+          } else {
+            throw new Error(`Rate limit exceeded. Please try again at ${resetTime}.`)
+          }
         } else {
-          throw new Error(`Rate limit exceeded. Please try again at ${resetTime}.`)
+          throw new Error(`GitHub API error: ${response.status} - ${response.statusText}`)
         }
       }
       throw new Error(`GitHub API error: ${response.status}`)
