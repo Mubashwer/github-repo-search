@@ -14,10 +14,10 @@ export default {
           {
             path: "release/crx-github-repo-search-*.zip",
             label: "Chrome Extension Package",
-            name: "crx-github-repo-search-${nextRelease.version}.zip"
-          }
-        ]
-      }
+            name: "crx-github-repo-search-${nextRelease.version}.zip",
+          },
+        ],
+      },
     ],
   ],
 };

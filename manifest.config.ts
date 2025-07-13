@@ -3,10 +3,11 @@ import pkg from "./package.json";
 
 export default defineManifest({
   manifest_version: 3,
-  name: pkg.name,
+  name: "GitHub Repository Search",
   version: pkg.version,
-  description: pkg.description,
-  permissions: ["activeTab", "storage", "identity"],
+  description:
+    "Quick GitHub repository search with Alt+G hotkey. Search across all GitHub repositories or filter by organization. Features real-time search, keyboard navigation, repository statistics, and optional GitHub authentication for higher rate limits.",
+  permissions: ["activeTab", "storage"],
   host_permissions: ["https://api.github.com/*"],
   background: {
     service_worker: "src/background/main.ts",

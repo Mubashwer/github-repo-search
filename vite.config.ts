@@ -20,7 +20,10 @@ export default defineConfig({
   },
   plugins: [
     crx({ manifest }),
-    zip({ outDir: 'release', outFileName: `crx-${pkg.name}-${pkg.version}.zip` }),
+    zip({
+      outDir: "release",
+      outFileName: `crx-${pkg.name}-${pkg.version}.zip`,
+    }),
   ],
   server: {
     cors: {
