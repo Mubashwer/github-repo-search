@@ -180,6 +180,46 @@ This project was built as a quick prototype to explore Chrome extension developm
 
 Feel free to fork, improve, and make it more robust! Pull requests welcome. 🚀
 
+## Security Considerations
+
+This extension handles GitHub personal access tokens and makes API requests. Here are the current security considerations and trade-offs:
+
+### **🔐 Token Storage**
+- **Current**: Tokens stored in plain text using Chrome's `storage.local` API
+- **Security**: Chrome sandboxes extension storage (other extensions/websites can't access it)
+- **Trade-off**: Plain text vs. encryption complexity - acceptable for prototype, could be enhanced for production
+
+### **🎯 Token Permissions**
+- **Public repositories**: No authentication required, but token improves rate limits (60 → 5,000 requests/hour)
+- **Private repositories**: Requires `repo` scope (full repository access - GitHub doesn't offer read-only for private repos)
+- **Current scope**: Extension requests full `repo` access for private repository search
+- **Usage**: Extension only performs repository searches, never modifies data
+
+### **📡 Network Security**
+- **HTTPS only**: All GitHub API requests use HTTPS
+- **No external servers**: Tokens never sent to third-party servers
+- **Client-side only**: All processing happens in the browser extension
+
+### **🛡️ Chrome Extension Security**
+- **Manifest V3**: Uses latest Chrome extension security model
+- **Minimal permissions**: Only requests necessary Chrome APIs
+- **Content Security Policy**: Default CSP protections in place
+- **Extension isolation**: Runs in isolated context from web pages
+
+### **⚠️ Known Limitations**
+- **Local access**: Users with file system access could potentially read stored tokens
+- **No token expiration**: Tokens don't automatically expire (relies on GitHub's token management)
+- **Full repo scope**: Private repository search requires broader permissions than ideal
+
+### **🔒 Recommendations for Production Use**
+- Implement token encryption with key derivation
+- Add token expiration and refresh mechanisms  
+- Consider OAuth flow instead of personal access tokens
+- Add option to clear stored credentials
+- Implement more granular permission explanations
+
+*For a quick prototype, the current approach balances functionality with reasonable security practices.*
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
