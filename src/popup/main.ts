@@ -163,7 +163,7 @@ class PopupSearchManager {
       this.state.results = response.repos || []
       this.state.selectedIndex = this.state.results.length > 0 ? 0 : -1
       this.state.isLoading = false
-      this.renderResults()
+      await this.renderResults()
     } catch (error) {
       console.error('Search error:', error)
       this.state.error = error instanceof Error ? error.message : 'Unknown error'
@@ -173,10 +173,21 @@ class PopupSearchManager {
   }
 
   private renderInstructions() {
+    const hasOrg = this.currentOrg && this.currentOrg.trim()
+    
     this.resultsContainer.innerHTML = `
       <div class="instructions">
         <p>Start typing to search GitHub repositories</p>
-        <p style="font-size: 12px; opacity: 0.8; margin: 8px 0;">Add an organization above to filter results</p>
+        ${hasOrg ? `
+          <p style="font-size: 12px; opacity: 0.8; margin: 8px 0;">
+            Searching in organization: <strong>${this.currentOrg}</strong>
+          </p>
+          <p style="font-size: 11px; opacity: 0.7; margin: 8px 0;">
+            Private organizations require authentication
+          </p>
+        ` : `
+          <p style="font-size: 12px; opacity: 0.8; margin: 8px 0;">Add an organization above to filter results</p>
+        `}
         <div class="shortcut-info">
           <span class="shortcut-key">Alt+G</span> opens this popup
         </div>
@@ -221,7 +232,7 @@ class PopupSearchManager {
       if (response.success) {
         // Re-run the last search
         if (this.state.searchTerm) {
-          this.performSearch(this.state.searchTerm)
+          await this.performSearch(this.state.searchTerm)
         } else {
           this.renderInstructions()
         }
@@ -235,13 +246,36 @@ class PopupSearchManager {
     }
   }
 
-  private renderResults() {
+  private async renderResults() {
     if (this.state.results.length === 0) {
+      const isOrgSearch = this.currentOrg && this.currentOrg.trim()
+      let isAuthenticated = false
+      
+      if (isOrgSearch) {
+        try {
+          const response = await chrome.runtime.sendMessage({ action: 'get-auth-state' })
+          isAuthenticated = response.authState?.isAuthenticated || false
+        } catch (error) {
+          console.error('Failed to get auth state:', error)
+        }
+      }
+      
       this.resultsContainer.innerHTML = `
         <div class="no-results">
-          No repositories found for "${this.state.searchTerm}"
+          <div style="margin-bottom: 16px;">No repositories found for "${this.state.searchTerm}"${isOrgSearch ? ` in organization "${this.currentOrg}"` : ''}</div>
+          ${isOrgSearch ? `
+            <div style="font-size: 12px; opacity: 0.8; margin-bottom: 12px;">
+              ${!isAuthenticated ? 'Private organizations require authentication.' : 'You may not have access to this organization, or it may not exist.'}
+            </div>
+            ${!isAuthenticated ? '<button class="auth-button">Authenticate with GitHub</button>' : ''}
+          ` : ''}
         </div>
       `
+      
+      if (isOrgSearch && !isAuthenticated) {
+        const authButton = this.resultsContainer.querySelector('.auth-button')
+        authButton?.addEventListener('click', this.authenticateWithGitHub.bind(this))
+      }
       return
     }
 
