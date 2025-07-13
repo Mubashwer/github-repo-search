@@ -2,9 +2,9 @@ export interface GitHubRepo {
   id: number;
   name: string;
   fullName: string;
-  description: string;
+  description: string | null;
   stars: number;
-  language: string;
+  language: string | null;
   url: string;
   owner: {
     login: string;
@@ -22,8 +22,9 @@ export interface SearchOverlayState {
 }
 
 export interface SearchMessage {
-  action: 'search-repos';
+  action: "search-repos";
   query: string;
+  org?: string;
 }
 
 export interface SearchResponse {
@@ -32,7 +33,7 @@ export interface SearchResponse {
 }
 
 export interface ToggleMessage {
-  action: 'toggle-search';
+  action: "toggle-search";
 }
 
 export interface AuthState {
@@ -41,11 +42,51 @@ export interface AuthState {
 }
 
 export interface AuthMessage {
-  action: 'authenticate' | 'logout' | 'get-auth-state';
+  action: "authenticate" | "get-auth-state";
+}
+
+export interface AuthTokenMessage {
+  action: "auth-token";
+  token: string;
 }
 
 export interface AuthResponse {
   success: boolean;
   authState?: AuthState;
   error?: string;
+}
+
+// GitHub API response interfaces
+export interface GitHubApiRepo {
+  id: number;
+  name: string;
+  full_name: string;
+  description: string | null;
+  stargazers_count: number;
+  language: string | null;
+  html_url: string;
+  owner: {
+    login: string;
+    avatar_url: string;
+  };
+}
+
+export interface GitHubSearchResponse {
+  items: GitHubApiRepo[];
+  total_count: number;
+  incomplete_results: boolean;
+}
+
+// Message types for chrome.runtime.onMessage
+export type RuntimeMessage =
+  | SearchMessage
+  | AuthMessage
+  | AuthTokenMessage
+  | ToggleMessage;
+
+export interface RuntimeResponse {
+  repos?: GitHubRepo[];
+  error?: string;
+  success?: boolean;
+  authState?: AuthState;
 }

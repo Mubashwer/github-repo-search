@@ -1,51 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GitHub Repo Search</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1><img src="../../images/logo.png" alt="GitHub" class="header-icon"> GitHub Search</h1>
-      <p>Find repositories instantly</p>
-    </div>
-    
-    <div class="search-container">
-      <div class="org-input-container">
-        <input 
-          type="text" 
-          id="orgInput" 
-          placeholder="Organization (optional)" 
-          autocomplete="off"
-          spellcheck="false"
-        >
-        <div class="org-icon">🏢</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Repo Search</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>
+          <img src="../../images/logo.png" alt="GitHub" class="header-icon" />
+          GitHub Search
+        </h1>
+        <p>Find repositories instantly</p>
       </div>
-      <div class="search-input-container">
-        <input 
-          type="text" 
-          id="searchInput" 
-          placeholder="Search GitHub repositories..." 
-          autocomplete="off"
-          spellcheck="false"
-        >
-        <div class="search-icon">🔍</div>
+
+      <div class="search-container">
+        <div class="org-input-container">
+          <input
+            type="text"
+            id="orgInput"
+            placeholder="Organization (optional)"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <div class="org-icon">🏢</div>
+        </div>
+        <div class="search-input-container">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search GitHub repositories..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <div class="search-icon">🔍</div>
+        </div>
       </div>
-    </div>
-    
-    <div id="resultsContainer" class="results-container">
-      <div class="instructions">
-        <p>Start typing to search GitHub repositories</p>
-        <div class="shortcut-info">
-          <span class="shortcut-key">Alt+G</span> opens this popup
+
+      <div id="resultsContainer" class="results-container">
+        <div class="instructions">
+          <p>Start typing to search GitHub repositories</p>
+          <div class="shortcut-info">
+            <span class="shortcut-key">Alt+G</span> opens this popup
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  
-  <script type="module" src="main.ts"></script>
-</body>
+
+    <script type="module" src="main.ts"></script>
+  </body>
 </html>

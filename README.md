@@ -15,17 +15,20 @@ A Chrome extension that allows you to quickly search GitHub repositories using t
 ### Development Install
 
 1. Clone this repository:
+
    ```bash
    git clone <repository-url>
    cd github-browser-plugin
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Build the extension:
+
    ```bash
    npm run build
    ```
@@ -55,12 +58,34 @@ The extension will be available on the Chrome Web Store once published.
 - **Vite** - Fast build tool
 - **CRXJS** - Chrome extension plugin for Vite
 - **Chrome Extensions Manifest V3** - Latest extension format
+- **ESLint** - JavaScript/TypeScript linter
+- **Prettier** - Code formatter
 
 ### Scripts
 
-- `npm run dev` - Start development server with hot reload
 - `npm run build` - Build production version
-- `npm run type-check` - Run TypeScript type checking
+- `npm run dev` - Start development server with hot reload
+- `npm run eslint` - Run ESLint only
+- `npm run eslint:fix` - Run ESLint with automatic fixes
+- `npm run format` - Format all files with Prettier
+- `npm run lint` - Run type checking and ESLint
+- `npm run lint:fix` - Format code, run type checking, and fix ESLint issues
+- `npm run preview` - Preview production build
+- `npm run typecheck` - Run TypeScript type checking
+
+### Code Quality
+
+This project uses ESLint and Prettier for code quality and formatting:
+
+- **ESLint**: Lints TypeScript/JavaScript code with TypeScript-specific rules
+- **Prettier**: Automatically formats code for consistent style
+- **TypeScript**: Provides static type checking
+
+To maintain code quality:
+
+1. Run `npm run lint` to check for issues
+2. Run `npm run lint:fix` to automatically fix most issues
+3. Format code with `npm run format`
 
 ### Project Structure
 
