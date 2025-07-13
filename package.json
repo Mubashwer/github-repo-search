@@ -24,7 +24,7 @@
     "search",
     "repositories"
   ],
-  "author": "",
+  "author": "Mubashwer Salman Khurshid",
   "license": "MIT",
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.0.0-beta.21",

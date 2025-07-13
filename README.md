@@ -2,9 +2,12 @@
 
 A Chrome extension that allows you to quickly search GitHub repositories using the **Alt+G** keyboard shortcut, similar to the Okta Browser Plugin.
 
+![Image displaying the GitHub Repo Search extension popup](popup-screenshot.png)
+
 ## Features
 
 - 🔍 **Quick Search**: Press `Alt+G` from any webpage to open the search overlay
+- 🏢 **Organization Search**: Search within specific GitHub organizations or across all repositories
 - ⚡ **Fast Results**: Real-time search using GitHub's API
 - 🎯 **Keyboard Navigation**: Use arrow keys to navigate, Enter to open repos
 - 🎨 **Clean UI**: Modern, responsive design that works on any website
@@ -45,10 +48,17 @@ The extension will be available on the Chrome Web Store once published.
 ## Usage
 
 1. **Open Search**: Press `Alt+G` on any webpage
-2. **Search**: Type your query to search GitHub repositories
-3. **Navigate**: Use `↑/↓` arrow keys to select results
-4. **Open**: Press `Enter` to open the selected repository in a new tab
-5. **Close**: Press `Escape` to close the search overlay
+2. **Set Organization** (optional): Enter an organization name to search within (e.g., "microsoft", "google")
+3. **Search**: Type your query to search GitHub repositories
+4. **Navigate**: Use `↑/↓` arrow keys to select results
+5. **Open**: Press `Enter` to open the selected repository in a new tab
+6. **Close**: Press `Escape` to close the search overlay
+
+### Search Tips
+
+- Leave the organization field empty to search across all of GitHub
+- Enter an organization name to search only within that organization's repositories
+- The extension remembers your last searched organization for convenience
 
 ## Development
 
@@ -58,8 +68,10 @@ The extension will be available on the Chrome Web Store once published.
 - **Vite** - Fast build tool
 - **CRXJS** - Chrome extension plugin for Vite
 - **Chrome Extensions Manifest V3** - Latest extension format
+- **Jest** - JavaScript testing framework
 - **ESLint** - JavaScript/TypeScript linter
 - **Prettier** - Code formatter
+- **Semantic Release** - Automated versioning and releases
 
 ### Scripts
 
@@ -71,21 +83,28 @@ The extension will be available on the Chrome Web Store once published.
 - `npm run lint` - Run type checking and ESLint
 - `npm run lint:fix` - Format code, run type checking, and fix ESLint issues
 - `npm run preview` - Preview production build
+- `npm run release` - Create automated release with semantic-release
+- `npm run test` - Run Jest unit tests
+- `npm run test:watch` - Run Jest tests in watch mode
+- `npm run test:coverage` - Run Jest tests with coverage report
 - `npm run typecheck` - Run TypeScript type checking
 
 ### Code Quality
 
-This project uses ESLint and Prettier for code quality and formatting:
+This project uses ESLint, Prettier, and Jest for code quality, formatting, and testing:
 
 - **ESLint**: Lints TypeScript/JavaScript code with TypeScript-specific rules
 - **Prettier**: Automatically formats code for consistent style
 - **TypeScript**: Provides static type checking
+- **Jest**: Unit testing framework with Chrome extension API mocking
 
 To maintain code quality:
 
 1. Run `npm run lint` to check for issues
 2. Run `npm run lint:fix` to automatically fix most issues
 3. Format code with `npm run format`
+4. Run `npm test` to execute unit tests
+5. Run `npm run test:coverage` to check test coverage
 
 ### Project Structure
 
