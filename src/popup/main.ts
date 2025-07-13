@@ -13,6 +13,7 @@ class PopupSearchManager {
     error: null
   }
   private searchTimeout: ReturnType<typeof setTimeout> | null = null
+  private orgTimeout: ReturnType<typeof setTimeout> | null = null
   private currentOrg: string = ''
 
   constructor() {
@@ -57,9 +58,16 @@ class PopupSearchManager {
     this.currentOrg = org
     this.saveLastOrganization(org)
     
-    // Re-trigger search if there's an active search term
+    // Clear previous org timeout
+    if (this.orgTimeout) {
+      clearTimeout(this.orgTimeout)
+    }
+    
+    // Debounce org changes to avoid excessive API calls
     if (this.state.searchTerm) {
-      this.performSearch(this.state.searchTerm)
+      this.orgTimeout = setTimeout(() => {
+        this.performSearch(this.state.searchTerm)
+      }, 300) // Same 300ms delay as search input
     }
   }
 
