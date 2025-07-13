@@ -3,17 +3,6 @@ import { AuthService } from '../services/auth'
 // Initialize auth service
 const authService = AuthService.getInstance()
 
-// Initialize when extension starts
-chrome.runtime.onStartup.addListener(async () => {
-  console.log('Extension startup - initializing auth service');
-  await authService.initialize()
-})
-
-chrome.runtime.onInstalled.addListener(async () => {
-  console.log('Extension installed - initializing auth service');
-  await authService.initialize()
-})
-
 // Handle service worker suspension/resumption
 chrome.runtime.onSuspend.addListener(() => {
   console.log('Service worker suspending');
@@ -26,31 +15,26 @@ chrome.runtime.onSuspendCanceled.addListener(() => {
 // Background script for handling search requests
 chrome.runtime.onMessage.addListener((request: any, _sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) => {
   if (request.action === 'search-repos') {
-    // Always ensure auth service is initialized before searching
-    authService.initialize()
-      .then(() => searchGitHubRepos(request.query, request.org))
-      .then(repos => sendResponse({ repos }))
+    searchGitHubRepos(request.query, request.org)
+      .then((repos) => sendResponse({ repos }))
       .catch(error => sendResponse({ error: error.message }));
     return true; // Keep the message channel open for async response
   }
   
   if (request.action === 'authenticate') {
-    // Ensure auth service is initialized before authenticating
-    authService.initialize()
-      .then(() => authService.authenticate())
-      .then(authState => sendResponse({ success: true, authState }))
+    authService.authenticate()
+      .then((authState) => sendResponse({ success: true, authState }))
       .catch(error => sendResponse({ success: false, error: error.message }));
     return true;
   }
   
   if (request.action === 'get-auth-state') {
-    // Always ensure auth service is initialized before returning state
-    authService.initialize()
-      .then(() => {
-        sendResponse({ success: true, authState: authService.getAuthState() });
+    authService.getAuthState()
+      .then((authState) => {
+        sendResponse({ success: true, authState });
       })
-      .catch(error => {
-        console.error('Failed to initialize auth service:', error);
+      .catch((error) => {
+        console.error('Failed to get auth state:', error);
         sendResponse({ success: false, error: error.message });
       });
     return true;
@@ -58,8 +42,12 @@ chrome.runtime.onMessage.addListener((request: any, _sender: chrome.runtime.Mess
   
   if (request.action === 'auth-token') {
     // Handle authentication token from auth page
-    chrome.storage.local.set({ 'github-token': request.token })
-      .then(() => authService.initialize()) // Re-initialize to load the new token
+    const authState = {
+      isAuthenticated: true,
+      token: request.token
+    };
+    
+    chrome.storage.local.set({ 'github_auth_state': authState })
       .then(() => sendResponse({ success: true }))
       .catch(error => sendResponse({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }));
     return true;
@@ -72,7 +60,7 @@ async function searchGitHubRepos(query: string, org?: string) {
   }
 
   try {
-    const headers = authService.getAuthHeaders()
+    const headers = await authService.getAuthHeaders()
     
     // Build search query with optional organization filter
     let searchQuery = query
@@ -91,14 +79,16 @@ async function searchGitHubRepos(query: string, org?: string) {
         const rateLimitReset = response.headers.get('X-RateLimit-Reset')
         const resetTime = rateLimitReset ? new Date(parseInt(rateLimitReset) * 1000).toLocaleTimeString() : 'unknown'
         
+        const authState = await authService.getAuthState()
+        
         console.log('Rate limit info:', {
           remaining: rateLimitRemaining,
           reset: resetTime,
-          isAuthenticated: authService.getAuthState().isAuthenticated
+          isAuthenticated: authState.isAuthenticated
         })
         
         if (rateLimitRemaining === '0') {
-          if (!authService.getAuthState().isAuthenticated) {
+          if (!authState.isAuthenticated) {
             throw new Error(`Rate limit exceeded. Please authenticate with GitHub for higher limits (5000/hour vs 60/hour). Rate limit resets at ${resetTime}.`)
           } else {
             throw new Error(`Rate limit exceeded. Please try again at ${resetTime}.`)

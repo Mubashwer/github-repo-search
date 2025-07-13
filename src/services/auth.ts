@@ -11,11 +11,6 @@ export class AuthService {
     return AuthService.instance
   }
 
-  async initialize(): Promise<void> {
-    // No need to load into memory - we'll always read from storage
-    console.log('AuthService initialized')
-  }
-
   async authenticate(): Promise<AuthState> {
     try {
       // Create a new tab with authentication instructions
