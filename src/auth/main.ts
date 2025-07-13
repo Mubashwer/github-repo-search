@@ -1,3 +1,5 @@
+import './style.css'
+
 class AuthManager {
   private tokenInput: HTMLInputElement
   private authenticateBtn: HTMLButtonElement

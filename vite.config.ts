@@ -9,6 +9,13 @@ export default defineConfig({
       '@': `${path.resolve(__dirname, 'src')}`,
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        auth: 'src/auth/index.html'
+      }
+    }
+  },
   plugins: [
     crx({ manifest }),
   ],
