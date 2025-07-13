@@ -28,13 +28,6 @@ chrome.runtime.onMessage.addListener((request: any, _sender: chrome.runtime.Mess
     return true;
   }
   
-  if (request.action === 'logout') {
-    authService.logout()
-      .then(() => sendResponse({ success: true }))
-      .catch(error => sendResponse({ success: false, error: error.message }));
-    return true;
-  }
-  
   if (request.action === 'get-auth-state') {
     sendResponse({ success: true, authState: authService.getAuthState() });
     return true;

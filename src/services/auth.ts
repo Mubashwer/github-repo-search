@@ -18,9 +18,6 @@ export class AuthService {
     const result = await chrome.storage.local.get(['github_auth_state'])
     if (result.github_auth_state) {
       this.authState = result.github_auth_state
-      // Only validate token when it's actually used, not on initialization
-      // This prevents clearing valid tokens due to temporary network issues
-      console.log('Loaded auth state from storage:', this.authState.isAuthenticated ? 'authenticated' : 'not authenticated')
     }
   }
 
@@ -91,16 +88,10 @@ export class AuthService {
         throw new Error(`GitHub API error: ${response.status}`)
       }
     } catch (error) {
-      // Token is invalid, clear auth state
-      this.authState = { isAuthenticated: false }
-      await chrome.storage.local.remove(['github_auth_state'])
+      // Don't clear the token - just throw the error
+      // Token should only be cleared by user action (logout/new auth)
       throw error
     }
-  }
-
-  async logout(): Promise<void> {
-    this.authState = { isAuthenticated: false }
-    await chrome.storage.local.remove(['github_auth_state'])
   }
 
   getAuthState(): AuthState {
