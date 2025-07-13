@@ -15,7 +15,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 // Background script for handling search requests
 chrome.runtime.onMessage.addListener((request: any, _sender: chrome.runtime.MessageSender, sendResponse: (response: any) => void) => {
   if (request.action === 'search-repos') {
-    searchGitHubRepos(request.query)
+    searchGitHubRepos(request.query, request.org)
       .then(repos => sendResponse({ repos }))
       .catch(error => sendResponse({ error: error.message }));
     return true; // Keep the message channel open for async response
@@ -41,14 +41,21 @@ chrome.runtime.onMessage.addListener((request: any, _sender: chrome.runtime.Mess
   }
 });
 
-async function searchGitHubRepos(query: string) {
+async function searchGitHubRepos(query: string, org?: string) {
   if (!query.trim()) {
     return [];
   }
 
   try {
     const headers = authService.getAuthHeaders()
-    const response = await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=10`, {
+    
+    // Build search query with optional organization filter
+    let searchQuery = query
+    if (org && org.trim()) {
+      searchQuery = `${query} org:${org.trim()}`
+    }
+    
+    const response = await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(searchQuery)}&sort=stars&order=desc&per_page=10`, {
       headers
     });
     

@@ -2,6 +2,7 @@ import type { SearchOverlayState } from '../types'
 
 class PopupSearchManager {
   private searchInput: HTMLInputElement
+  private orgInput: HTMLInputElement
   private resultsContainer: HTMLDivElement
   private state: SearchOverlayState = {
     isVisible: true,
@@ -12,18 +13,54 @@ class PopupSearchManager {
     error: null
   }
   private searchTimeout: ReturnType<typeof setTimeout> | null = null
+  private currentOrg: string = ''
 
   constructor() {
     this.searchInput = document.getElementById('searchInput') as HTMLInputElement
+    this.orgInput = document.getElementById('orgInput') as HTMLInputElement
     this.resultsContainer = document.getElementById('resultsContainer') as HTMLDivElement
     
     this.initializeEventListeners()
+    this.loadLastOrganization()
     this.focusSearchInput()
   }
 
   private initializeEventListeners() {
     this.searchInput.addEventListener('input', this.handleSearchInput.bind(this))
     this.searchInput.addEventListener('keydown', this.handleKeydown.bind(this))
+    this.orgInput.addEventListener('input', this.handleOrgInput.bind(this))
+    this.orgInput.addEventListener('keydown', this.handleKeydown.bind(this))
+  }
+
+  private async loadLastOrganization() {
+    try {
+      const result = await chrome.storage.local.get(['lastSearchedOrg'])
+      if (result.lastSearchedOrg) {
+        this.currentOrg = result.lastSearchedOrg
+        this.orgInput.value = this.currentOrg
+      }
+    } catch (error) {
+      console.error('Failed to load last organization:', error)
+    }
+  }
+
+  private async saveLastOrganization(org: string) {
+    try {
+      await chrome.storage.local.set({ lastSearchedOrg: org })
+    } catch (error) {
+      console.error('Failed to save last organization:', error)
+    }
+  }
+
+  private handleOrgInput(event: Event) {
+    const org = (event.target as HTMLInputElement).value.trim()
+    this.currentOrg = org
+    this.saveLastOrganization(org)
+    
+    // Re-trigger search if there's an active search term
+    if (this.state.searchTerm) {
+      this.performSearch(this.state.searchTerm)
+    }
   }
 
   private focusSearchInput() {
@@ -115,7 +152,8 @@ class PopupSearchManager {
     try {
       const response = await chrome.runtime.sendMessage({
         action: 'search-repos',
-        query: query
+        query: query,
+        org: this.currentOrg
       })
 
       if (response.error) {
@@ -138,6 +176,7 @@ class PopupSearchManager {
     this.resultsContainer.innerHTML = `
       <div class="instructions">
         <p>Start typing to search GitHub repositories</p>
+        <p style="font-size: 12px; opacity: 0.8; margin: 8px 0;">Add an organization above to filter results</p>
         <div class="shortcut-info">
           <span class="shortcut-key">Alt+G</span> opens this popup
         </div>
