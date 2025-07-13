@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+release
 *.local
 
 # Editor directories and files
@@ -26,6 +27,7 @@ dist-ssr
 # Chrome extension build artifacts
 dist/
 build/
+release/
 *.crx
 *.pem
 
