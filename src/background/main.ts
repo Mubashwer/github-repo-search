@@ -90,7 +90,7 @@ async function searchGitHubRepos(query: string, org?: string) {
     }
 
     const response = await fetch(
-      `https://api.github.com/search/repositories?q=${encodeURIComponent(searchQuery)}&sort=stars&order=desc&per_page=10`,
+      `https://api.github.com/search/repositories?q=${encodeURIComponent(searchQuery)}&sort=updated&order=desc&per_page=10`,
       {
         headers,
       },
