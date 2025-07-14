@@ -4,6 +4,7 @@ class PopupSearchManager {
   private searchInput: HTMLInputElement;
   private orgInput: HTMLInputElement;
   private resultsContainer: HTMLDivElement;
+  private viewOnGitHubLink: HTMLAnchorElement;
   private state: SearchOverlayState = {
     isVisible: true,
     searchTerm: "",
@@ -24,6 +25,7 @@ class PopupSearchManager {
     this.resultsContainer = document.getElementById(
       "resultsContainer",
     ) as HTMLDivElement;
+    this.viewOnGitHubLink = document.getElementById("viewOnGitHub") as HTMLAnchorElement;
 
     this.initializeEventListeners();
     this.loadLastOrganization();
@@ -38,6 +40,7 @@ class PopupSearchManager {
     this.searchInput.addEventListener("keydown", this.handleKeydown.bind(this));
     this.orgInput.addEventListener("input", this.handleOrgInput.bind(this));
     this.orgInput.addEventListener("keydown", this.handleKeydown.bind(this));
+    this.viewOnGitHubLink.addEventListener("click", this.handleViewOnGitHub.bind(this));
   }
 
   private async loadLastOrganization() {
@@ -83,6 +86,36 @@ class PopupSearchManager {
     setTimeout(() => {
       this.searchInput.focus();
     }, 100);
+  }
+
+  private handleViewOnGitHub(event: Event) {
+    event.preventDefault();
+    
+    if (!this.state.searchTerm) {
+      return;
+    }
+
+    // Build the GitHub search URL
+    const searchParams = new URLSearchParams();
+    searchParams.append('q', this.state.searchTerm);
+    searchParams.append('type', 'repositories');
+    
+    if (this.currentOrg) {
+      searchParams.set('q', `${this.state.searchTerm} org:${this.currentOrg}`);
+    }
+
+    const githubUrl = `https://github.com/search?${searchParams.toString()}`;
+    
+    chrome.tabs.create({ url: githubUrl });
+    window.close();
+  }
+
+  private updateViewOnGitHubLink() {
+    if (this.state.searchTerm.trim()) {
+      this.viewOnGitHubLink.style.display = 'flex';
+    } else {
+      this.viewOnGitHubLink.style.display = 'none';
+    }
   }
 
   private handleSearchInput(event: Event) {
@@ -163,12 +196,14 @@ class PopupSearchManager {
       this.state.results = [];
       this.state.selectedIndex = -1;
       this.renderInstructions();
+      this.updateViewOnGitHubLink();
       return;
     }
 
     this.state.isLoading = true;
     this.state.error = null;
     this.renderLoading();
+    this.updateViewOnGitHubLink();
 
     try {
       const response = await chrome.runtime.sendMessage({
@@ -185,12 +220,14 @@ class PopupSearchManager {
       this.state.selectedIndex = this.state.results.length > 0 ? 0 : -1;
       this.state.isLoading = false;
       await this.renderResults();
+      this.updateViewOnGitHubLink();
     } catch (error) {
       console.error("Search error:", error);
       this.state.error =
         error instanceof Error ? error.message : "Unknown error";
       this.state.isLoading = false;
       this.renderError();
+      this.updateViewOnGitHubLink();
     }
   }
 
