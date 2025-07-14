@@ -25,7 +25,9 @@ class PopupSearchManager {
     this.resultsContainer = document.getElementById(
       "resultsContainer",
     ) as HTMLDivElement;
-    this.viewOnGitHubLink = document.getElementById("viewOnGitHub") as HTMLAnchorElement;
+    this.viewOnGitHubLink = document.getElementById(
+      "viewOnGitHub",
+    ) as HTMLAnchorElement;
 
     this.initializeEventListeners();
     this.loadLastOrganization();
@@ -40,7 +42,10 @@ class PopupSearchManager {
     this.searchInput.addEventListener("keydown", this.handleKeydown.bind(this));
     this.orgInput.addEventListener("input", this.handleOrgInput.bind(this));
     this.orgInput.addEventListener("keydown", this.handleKeydown.bind(this));
-    this.viewOnGitHubLink.addEventListener("click", this.handleViewOnGitHub.bind(this));
+    this.viewOnGitHubLink.addEventListener(
+      "click",
+      this.handleViewOnGitHub.bind(this),
+    );
   }
 
   private async loadLastOrganization() {
@@ -90,31 +95,31 @@ class PopupSearchManager {
 
   private handleViewOnGitHub(event: Event) {
     event.preventDefault();
-    
+
     if (!this.state.searchTerm) {
       return;
     }
 
     // Build the GitHub search URL
     const searchParams = new URLSearchParams();
-    searchParams.append('q', this.state.searchTerm);
-    searchParams.append('type', 'repositories');
-    
+    searchParams.append("q", this.state.searchTerm);
+    searchParams.append("type", "repositories");
+
     if (this.currentOrg) {
-      searchParams.set('q', `${this.state.searchTerm} org:${this.currentOrg}`);
+      searchParams.set("q", `${this.state.searchTerm} org:${this.currentOrg}`);
     }
 
     const githubUrl = `https://github.com/search?${searchParams.toString()}`;
-    
+
     chrome.tabs.create({ url: githubUrl });
     window.close();
   }
 
   private updateViewOnGitHubLink() {
     if (this.state.searchTerm.trim()) {
-      this.viewOnGitHubLink.style.display = 'flex';
+      this.viewOnGitHubLink.style.display = "flex";
     } else {
-      this.viewOnGitHubLink.style.display = 'none';
+      this.viewOnGitHubLink.style.display = "none";
     }
   }
 
