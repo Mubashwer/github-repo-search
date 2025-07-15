@@ -5,6 +5,7 @@ class PopupSearchManager {
   private orgInput: HTMLInputElement;
   private resultsContainer: HTMLDivElement;
   private viewOnGitHubLink: HTMLAnchorElement;
+  private footer: HTMLDivElement;
   private state: SearchOverlayState = {
     isVisible: true,
     searchTerm: "",
@@ -28,6 +29,7 @@ class PopupSearchManager {
     this.viewOnGitHubLink = document.getElementById(
       "viewOnGitHub",
     ) as HTMLAnchorElement;
+    this.footer = document.getElementById("footer") as HTMLDivElement;
 
     this.initializeEventListeners();
     this.loadLastOrganization();
@@ -117,9 +119,9 @@ class PopupSearchManager {
 
   private updateViewOnGitHubLink() {
     if (this.state.searchTerm.trim()) {
-      this.viewOnGitHubLink.style.display = "flex";
+      this.footer.style.display = "flex";
     } else {
-      this.viewOnGitHubLink.style.display = "none";
+      this.footer.style.display = "none";
     }
   }
 
