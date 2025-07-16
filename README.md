@@ -17,7 +17,18 @@ A Chrome extension that allows you to quickly search GitHub repositories using t
 
 ## Installation
 
-### Download from GitHub Releases (Recommended)
+### Chrome Web Store (Recommended)
+
+1. **Install from Chrome Web Store**:
+   - Visit the [GitHub Repo Search extension page](https://chromewebstore.google.com/detail/github-repo-search/kijhcmelngcbmhjfmdbmecoblemolpon)
+   - Click "Add to Chrome"
+   - Confirm the installation when prompted
+
+2. **Start using**:
+   - Press `Alt+G` on any webpage to open the search overlay
+   - No additional setup required!
+
+### Download from GitHub Releases (Alternative)
 
 1. **Download the extension**:
    - Go to the [GitHub Releases page](https://github.com/Mubashwer/github-repo-search/releases)
@@ -59,10 +70,6 @@ A Chrome extension that allows you to quickly search GitHub repositories using t
    - Open Chrome and go to `chrome://extensions/`
    - Enable "Developer mode"
    - Click "Load unpacked" and select the `dist` folder
-
-### Chrome Web Store
-
-The extension is not currently available on the Chrome Web Store. For now, please use the [GitHub Releases](#download-from-github-releases-recommended) method above.
 
 ## Usage
 
