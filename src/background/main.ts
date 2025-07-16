@@ -86,7 +86,7 @@ async function searchGitHubRepos(query: string, org?: string) {
     // Build search query with optional organization filter
     let searchQuery = query;
     if (org && org.trim()) {
-      searchQuery = `${query} org:${org.trim()}`;
+      searchQuery = `org:${org.trim()} ${query}`;
     }
 
     const response = await fetch(

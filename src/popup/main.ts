@@ -108,7 +108,7 @@ class PopupSearchManager {
     searchParams.append("type", "repositories");
 
     if (this.currentOrg) {
-      searchParams.set("q", `${this.state.searchTerm} org:${this.currentOrg}`);
+      searchParams.set("q", `org:${this.currentOrg} ${this.state.searchTerm}`);
     }
 
     const githubUrl = `https://github.com/search?${searchParams.toString()}`;
